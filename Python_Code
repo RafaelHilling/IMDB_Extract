@@ -22,23 +22,20 @@ def extract_movie_details(movie_link):
         title = None
         date = None
 
-        movie_data = movie_soup.find('div', attrs={'class': 'title_wrapper'})
+        movie_data = movie_soup.find('div', attrs={'class':"sc-94726ce4-1 iNShGo"})
         if movie_data is not None:
-            title = movie_data.find('h1').get_text()
-            date = movie_data.find('a', attrs={'title': 'See more release dates'}).get_text().strip()
+            title = movie_soup.find('h1', attrs={'class':"sc-b73cd867-0 eKrKux"}).get_text()
+            date = movie_soup.find('span', attrs={'class':"sc-52284603-2 iTRONr"}).get_text()
 
-        rating = movie_soup.find('span', attrs={'itemprop': 'ratingValue'}).get_text() if movie_soup.find(
-            'span', attrs={'itemprop': 'ratingValue'}) else None
+        rating = movie_soup.find('span', attrs={'class':"sc-7ab21ed2-1 jGRxWM"}).get_text()
 
-        plot_text = movie_soup.find('div', attrs={'class': 'summary_text'}).get_text().strip() if movie_soup.find(
-            'div', attrs={'class': 'summary_text'}) else None
+        plot_text = movie_soup.find('span', attrs={'class':"sc-16ede01-0 fMPjMP"}).get_text().strip()
 
         with open('movies.csv', mode='a', ) as file:
             movie_writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             if all([title, date, rating, plot_text]):
                 print(title, date, rating, plot_text)
                 movie_writer.writerow([title, date, rating, plot_text])
-
 
 def extract_movies(soup):
     movies_table = soup.find('table', attrs={'data-caller-name': 'chart-moviemeter'}).find('tbody')
